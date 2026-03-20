@@ -104,6 +104,8 @@
     "block.eln2.kinetic_rolling_machine": "Kinetic Rolling Machine",
     "block.eln2.vulcanizing_autoclave": "Autoclave",
     "block.eln2.fluid_pipe": "Fluid Pipe",
+    "block.eln2.primitive_kinetic_crusher": "Primitive Kinetic Crusher",
+    "block.eln2.brushed_dc_motor_crusher": "Brushed DC Motor Crusher",
 
     // Wire Parts:
     "item.eln2.standard_uninsulated_copper_thermal_wire": "Standard Uninsulated Copper Thermal Conduit",
@@ -160,6 +162,11 @@
     "item.eln2.micro_grid_dc_to_dc_converter_800w": "800W Micro-Grid Power Converter",
     "item.eln2.potential_probe": "Potential Probe",
     "item.eln2.basic_two_channel_oscilloscope": "Basic Oscilloscope",
+    "item.eln2.basic_dc_motor": "Basic DC Motor",
+
+    //Kinetics:
+    "item.eln2.primitive_standard_iron_straight_joint": "Primitive Standard Straight Joint",
+
 
     // Materials:
     "item.eln2.coke": "Coke",
