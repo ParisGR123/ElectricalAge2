@@ -151,6 +151,7 @@
     "item.eln2.voltage_source": "Voltage Source",
     "item.eln2.ground": "Ground Pin",
     "item.eln2.resistor": "Resistor",
+    "item.eln2.diode": "Diode",
     "item.eln2.thermal_radiator": "Thermal Radiator",
     "item.eln2.photovoltaic_panel": "Solar Panel",
     "item.eln2.light_part": "Wall-Mounted Light",
