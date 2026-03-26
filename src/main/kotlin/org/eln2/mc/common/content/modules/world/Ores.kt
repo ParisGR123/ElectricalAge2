@@ -131,4 +131,18 @@ object Eln2Ores : ContentModule() {
         .withLootDatagen()
         .withModelDatagen(MyColor(144, 135, 131))
         .withVanillaSmeltingDatagen(Eln2Ingredients.TIN_INGOT)
+
+    val PENTLANDITE_ORE = basicOre("pentlandite")
+        .withTagDatagen(BlockTags.MINEABLE_WITH_PICKAXE)
+        .withTagDatagen(BlockTags.NEEDS_IRON_TOOL)
+        .withLootDatagen()
+        .withModelDatagen(MyColor(0xBFA07A))
+        .withVanillaSmeltingDatagen(Eln2Ingredients.NICKEL_INGOT)
+
+    val CHROMITE_ORE = basicOre("chromite")
+        .withTagDatagen(BlockTags.MINEABLE_WITH_PICKAXE)
+        .withTagDatagen(BlockTags.NEEDS_IRON_TOOL)
+        .withLootDatagen()
+        .withModelDatagen(MyColor(0x2B2622))
+        .withVanillaSmeltingDatagen(Eln2Ingredients.CHROMIUM_INGOT)
 }

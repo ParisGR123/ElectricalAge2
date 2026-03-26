@@ -328,4 +328,50 @@ object Eln2Ingredients : ContentModule() {
     val BURNT_RUBBER = itemDefault("burnt_rubber")
 
     //#endregion
+
+    //#region Nickel
+
+    val NICKEL_INGOT = INGOTS.register("nickel_ingot", MyColor(0xBDBA8E))
+    val NICKEL_PLATE = PLATES.build("nickel_plate", NICKEL_INGOT.tint) {
+        allRecipes(NICKEL_INGOT)
+    }
+    val NICKEL_WIRE = WIRES.build("nickel_wire", NICKEL_INGOT.tint) {
+        sourceItemForSlicing = NICKEL_PLATE
+        sourceItemForExtruding = NICKEL_INGOT
+    }
+    val NICKEL_DUST = DUSTS.build("nickel_dust", NICKEL_INGOT.tint) {
+        fromCrushing(NICKEL_INGOT)
+        fromCrushing(NICKEL_PLATE)
+        fromCrushing(NICKEL_WIRE)
+    }
+
+    //#endregion
+
+    //#region Chromium
+
+    val CHROMIUM_INGOT = INGOTS.register("chromium_ingot", MyColor(0xE6E6E6))
+    val CHROMIUM_PLATE = PLATES.build("chromium_plate", CHROMIUM_INGOT.tint) {
+        allRecipes(CHROMIUM_INGOT)
+    }
+    val CHROMIUM_DUST = DUSTS.build("chromium_dust", CHROMIUM_INGOT.tint) {
+        fromCrushing(CHROMIUM_INGOT)
+        fromCrushing(CHROMIUM_PLATE)
+    }
+
+    //#endregion
+
+    //#region NiChrome
+
+    val NICHROME_INGOT = INGOTS.register("nichrome_ingot", MyColor(0xD1D1D1))
+    val NICHROME_PLATE = PLATES.build("nichrome_plate", NICHROME_INGOT.tint) {
+        allRecipes(NICHROME_INGOT)
+    }
+    val NICHROME_WIRE = WIRES.build("nichrome_wire", NICHROME_INGOT.tint) {
+        sourceItemForSlicing = NICHROME_PLATE
+        sourceItemForExtruding = NICHROME_INGOT
+    }
+
+    //#endregion
 }
+
+
