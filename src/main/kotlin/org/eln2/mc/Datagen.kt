@@ -646,9 +646,9 @@ class Eln2ItemModelProviderDatagen(output: PackOutput, existingFileHelper: Exist
             }
         }
 
-        fromBase(Eln2Ingredients.INGOTS.itemsForModelDatagen, "ingot_base", "ingot")
+        fromBase(Eln2Ingredients.INGOTS.itemsForModelDatagen, "processingage/ingot", "ingot")
         fromBase(Eln2Ingredients.HOT_INGOTS.itemsForModelDatagen, "hot_ingot_base", "hot ingot", true)
-        fromBase(Eln2Ingredients.PLATES.itemsForModelDatagen, "plate_base", "plate")
+        fromBase(Eln2Ingredients.PLATES.itemsForModelDatagen, "processingage/sheet", "plate")
         fromBase(Eln2Ingredients.HOT_PLATES.itemsForModelDatagen, "hot_plate_base", "hot plate", true)
         fromBase(Eln2Ingredients.WIRES.itemsForModelDatagen, "wire_base", "wire")
         fromBase(Eln2Ingredients.DUSTS.itemsForModelDatagen, "dust_base", "dust")
