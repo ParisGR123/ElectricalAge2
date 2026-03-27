@@ -285,6 +285,7 @@ object Eln2Processing : ContentModule() {
         MenuScreens.register(FURNACE_MENU.get(), ::FurnaceScreen)
         MenuScreens.register(CRUSHER_MENU.get(), ::CrusherScreen)
         MenuScreens.register(EXTRUDER_MENU.get(), ::ExtruderScreen)
+        MenuScreens.register(ALLOY_SMELTER_MENU.get(), ::AlloySmelterScreen)
 
         MenuScreens.register(ROLLING_MACHINE_MENU.get()) { menu, inventory, title ->
             BasicProgressScreen(
@@ -762,6 +763,29 @@ object Eln2Processing : ContentModule() {
             VULCANIZING_AUTOCLAVE_MAIN_BLOCK.get()
         )
     }
+
+    //#endregion
+
+    //#region Alloy Smelter
+
+    val ALLOY_SMELTER_CELL = cellMemoize("alloy_smelter_cell") {
+        val map = directionPoleMapPlanar(Base6Direction3d.Left, Base6Direction3d.Right)
+
+        CellFactory {
+            AlloySmelterCell(it, map)
+        }
+    }
+
+    val ALLOY_SMELTER_BLOCK = blockAndItem("alloy_smelter") { AlloySmelterBlock() }
+        .withSelfDrop()
+
+    val ALLOY_SMELTER_BLOCK_ENTITY = blockEntityOnly(
+        "alloy_smelter",
+        ALLOY_SMELTER_BLOCK.block,
+        ::AlloySmelterBlockEntity
+    )
+
+    val ALLOY_SMELTER_MENU = menu("alloy_smelter", ::AlloySmelterMenu)
 
     //#endregion
 }
