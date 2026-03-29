@@ -787,5 +787,6 @@ object Eln2Processing : ContentModule() {
 
     val ALLOY_SMELTER_MENU = menu("alloy_smelter", ::AlloySmelterMenu)
 
+    val ALLOY_SMELTING_RECIPE = RecipeRegistry.registerAlloySmeltingRecipe("alloy_smelting")
     //#endregion
 }

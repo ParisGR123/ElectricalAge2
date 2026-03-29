@@ -1,0 +1,8 @@
+{
+    "type": "eln2:alloy_smelting",
+    "ingredientA": { "item": "minecraft:copper_ingot" },
+    "ingredientB": { "item": "eln2:tin_ingot" },
+    "result": { "item": "eln2:bronze_ingot", "count": 2 },
+    "duration": 10.0,
+    "tier": 0
+}

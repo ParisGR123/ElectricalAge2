@@ -56,8 +56,10 @@ import org.eln2.mc.common.containers.MyAbstractContainerScreen
 import org.eln2.mc.common.containers.SlotItemHandlerWithPlacePredicate
 import org.eln2.mc.common.content.modules.Eln2Processing
 import org.eln2.mc.PoleMap
-import org.eln2.mc.common.recipes.foundation.INPUT_SLOT
-import org.eln2.mc.common.recipes.foundation.OUTPUT_SLOT
+import org.eln2.mc.common.recipes.foundation.AlloySmeltingRecipe
+import org.eln2.mc.common.recipes.foundation.ALLOY_INPUT_SLOT_A
+import org.eln2.mc.common.recipes.foundation.ALLOY_INPUT_SLOT_B
+import org.eln2.mc.common.recipes.foundation.ALLOY_OUTPUT_SLOT
 import org.eln2.mc.extensions.constructMenuHelper2
 import org.eln2.mc.extensions.getQuantity
 import org.eln2.mc.extensions.putQuantity
@@ -167,29 +169,17 @@ class AlloySmelterBlockEntity(pos: BlockPos, state: BlockState) : CellBlockEntit
         }
     }
 
-    class InventoryHandler(val blockEntity: AlloySmelterBlockEntity) : ItemStackHandler(2) {
+    class InventoryHandler(val blockEntity: AlloySmelterBlockEntity) : ItemStackHandler(3) {
         override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
-            if(slot == OUTPUT_SLOT) {
-                return stack
-            }
-
+            if (slot == ALLOY_OUTPUT_SLOT) return stack
             return super.insertItem(slot, stack, simulate)
         }
 
-        fun export(stack: ItemStack) = super.insertItem(OUTPUT_SLOT, stack, false) != stack
+        fun export(stack: ItemStack) = super.insertItem(ALLOY_OUTPUT_SLOT, stack, false).isEmpty
 
-        override fun isItemValid(slot: Int, stack: ItemStack): Boolean {
-            return if(slot == INPUT_SLOT) {
-                blockEntity.level!!.recipeExists(RecipeType.SMELTING, stack)
-            }
-            else {
-                true
-            }
-        }
+        override fun isItemValid(slot: Int, stack: ItemStack) = true
 
-        override fun onContentsChanged(slot: Int) {
-            blockEntity.setChanged()
-        }
+        override fun onContentsChanged(slot: Int) { blockEntity.setChanged() }
     }
 
     class AlloySmelterData : SimpleContainerData(3) {
@@ -232,21 +222,24 @@ class AlloySmelterBlockEntity(pos: BlockPos, state: BlockState) : CellBlockEntit
         data.smeltProgress = 0.0
         operationBurnTime = 0
 
-        val inputStack = inventoryHandler.getStackInSlot(INPUT_SLOT)
+        val stackA = inventoryHandler.getStackInSlot(ALLOY_INPUT_SLOT_A)
+        val stackB = inventoryHandler.getStackInSlot(ALLOY_INPUT_SLOT_B)
 
-        cell.isActive = if (inputStack.isEmpty) {
+        cell.isActive = if (stackA.isEmpty || stackB.isEmpty) {
             false
         } else {
-            recipe = level!!
-                .recipeManager
-                .getRecipeFor(RecipeType.SMELTING, SimpleContainer(inputStack), level!!)
-                .get()
-
-            true
+            val container = SimpleContainer(3).also {
+                it.setItem(ALLOY_INPUT_SLOT_A, stackA)
+                it.setItem(ALLOY_INPUT_SLOT_B, stackB)
+            }
+            recipe = level!!.recipeManager
+                .getRecipeFor(Eln2Processing.ALLOY_SMELTING_RECIPE, container, level!!)
+                .orElse(null)
+            recipe != null
         }
     }
 
-    private var recipe: SmeltingRecipe? = null
+    private var recipe: AlloySmeltingRecipe? = null
 
     fun serverTick() {
         data.resistorTemperature = cell.resistorThermalMass.temperature.value.toInt()
@@ -270,9 +263,10 @@ class AlloySmelterBlockEntity(pos: BlockPos, state: BlockState) : CellBlockEntit
         // The saved data is always changing while we're smelting.
         setChanged()
 
-        val inputStack = inventoryHandler.getStackInSlot(INPUT_SLOT)
+        val stackA = inventoryHandler.getStackInSlot(ALLOY_INPUT_SLOT_A)
+        val stackB = inventoryHandler.getStackInSlot(ALLOY_INPUT_SLOT_B)
 
-        if (inputStack.isEmpty) {
+        if (stackA.isEmpty || stackB.isEmpty) {
             loadOperation()
             return
         }
@@ -280,8 +274,10 @@ class AlloySmelterBlockEntity(pos: BlockPos, state: BlockState) : CellBlockEntit
         if (operationBurnTime >= BURN_TIME_TARGET) {
             val recipe = this.recipe ?: error("Burning without recipe available")
 
-            if (inventoryHandler.export(ItemStack(recipe.getResultItem(RegistryAccess.EMPTY).item, 1))) {
-                inventoryHandler.setStackInSlot(INPUT_SLOT, ItemStack(inputStack.item, inputStack.count - 1))
+
+            if (inventoryHandler.export(ItemStack(recipe.output.item, recipe.output.count))) {
+                inventoryHandler.setStackInSlot(ALLOY_INPUT_SLOT_A, ItemStack(stackA.item, stackA.count - 1))
+                inventoryHandler.setStackInSlot(ALLOY_INPUT_SLOT_B, ItemStack(stackB.item, stackB.count - 1))
                 loadOperation()
             } else {
                 LOG.error("Failed to export item $recipe")
@@ -338,24 +334,16 @@ class AlloySmelterMenu(
     constructor(pContainerId: Int, playerInventory: Inventory) : this(
         pContainerId,
         playerInventory,
-        ItemStackHandler(2),
+        ItemStackHandler(3),
         AlloySmelterBlockEntity.AlloySmelterData(),
         ContainerLevelAccess.NULL,
         playerInventory.player.level()
     )
 
     init {
-        addSlot(
-            SlotItemHandlerWithPlacePredicate(handler, INPUT_SLOT, 56, 35) {
-                level.recipeExists(RecipeType.SMELTING, it)
-            }
-        )
-
-        addSlot(
-            SlotItemHandlerWithPlacePredicate(handler, OUTPUT_SLOT, 116, 35) {
-                false
-            }
-        )
+        addSlot(SlotItemHandlerWithPlacePredicate(handler, ALLOY_INPUT_SLOT_A, 47, 35) { !it.isEmpty })
+        addSlot(SlotItemHandlerWithPlacePredicate(handler, ALLOY_INPUT_SLOT_B, 65, 35) { !it.isEmpty })
+        addSlot(SlotItemHandlerWithPlacePredicate(handler, ALLOY_OUTPUT_SLOT, 116, 35) { false })
 
         addDataSlots(containerData)
 

@@ -11,6 +11,7 @@ import net.minecraftforge.registries.RegistryObject
 import org.ageseries.libage.data.MapPairBiMap
 import org.ageseries.libage.data.MutableMapPairBiMap
 import org.eln2.mc.MODID
+import org.eln2.mc.common.recipes.foundation.AlloySmeltingRecipe
 import org.eln2.mc.common.recipes.foundation.CatalyzedSimpleProcessingRecipe
 import org.eln2.mc.common.recipes.foundation.DirectSimpleProcessingRecipe
 import org.eln2.mc.resource
@@ -50,6 +51,10 @@ object RecipeRegistry {
 
     fun registerCatalyzedRecipe(id: String) : RecipeType<CatalyzedSimpleProcessingRecipe> = register<CatalyzedSimpleProcessingRecipe>(id) {
         CatalyzedSimpleProcessingRecipe.Serializer(it)
+    }
+
+    fun registerAlloySmeltingRecipe(id: String): RecipeType<AlloySmeltingRecipe> = register<AlloySmeltingRecipe>(id) {
+        AlloySmeltingRecipe.Serializer(it)
     }
 }
 
